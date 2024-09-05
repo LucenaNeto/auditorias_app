@@ -1,7 +1,6 @@
 import 'dart:typed_data';
-
+import 'package:formulario_app/models/form.dart';
 import 'package:flutter/material.dart';
-import '../models/form.dart';
 import '../models/question.dart';
 import 'dart:io';
 
@@ -11,7 +10,7 @@ class FormProvider with ChangeNotifier {
   List<Formulario> get formularios => _formularios;
 
   void addForm(String title) {
-    _formularios.add(Formulario(title: title));
+    _formularios.add(Formulario(title: title, questions: []));
     notifyListeners();
   }
 
@@ -19,13 +18,11 @@ class FormProvider with ChangeNotifier {
     return _formularios[index];
   }
 
-  void addQuestion(int formIndex, String questionText) {
-    _formularios[formIndex].questions.add(
-          Question(
-            questionText: questionText,
-          ),
-        );
-    notifyListeners();
+  void addQuestion(int formIndex, String question) {
+    _formularios[formIndex]
+        .questions
+        .add(question as Question); // add pergunta ao formulario
+    notifyListeners(); // notifica UI para atualizar
   }
 
   void updateAnswer(int formIndex, int questionIndex, bool answer) {
