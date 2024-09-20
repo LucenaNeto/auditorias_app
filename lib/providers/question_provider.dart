@@ -9,18 +9,27 @@ class QuestionProvider with ChangeNotifier {
 
   // Método para adicionar uma nova pergunta com imagem opcional.
   void addQuestion(String title, Uint8List? imageData) {
-    _questions.add(
-      Question(
-        questionText: title,
-        imageData: imageData, // A imagem é armazenada como Uint8List.
-      ),
-    );
-    notifyListeners();
+    if (title.isNotEmpty) {
+      _questions.add(
+        Question(
+          questionText: title,
+          imageData: imageData,
+        ),
+      );
+      notifyListeners();
+    } else {
+      print("O título da pergunta não pode estar vazio.");
+    }
   }
 
   // Método para anexar ou atualizar uma imagem para uma pergunta existente.
   void attachImageToQuestion(int questionIndex, Uint8List imageData) {
-    _questions[questionIndex].imageData = imageData;
-    notifyListeners();
+    if (questionIndex >= 0 && questionIndex < _questions.length) {
+      _questions[questionIndex].imageData = imageData;
+      notifyListeners();
+    } else {
+      // Lida com o caso de índice inválido (opcional)
+      print("Índice da pergunta inválido");
+    }
   }
 }

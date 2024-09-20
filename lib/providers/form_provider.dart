@@ -18,7 +18,9 @@ class FormProvider with ChangeNotifier {
     return _formularios[index];
   }
 
-  void addQuestion(int formIndex, String question) {
+  void addQuestion(int formIndex, String questionText) {
+    final question =
+        Question(questionText: questionText); // cria uma nova pergunta
     _formularios[formIndex]
         .questions
         .add(question as Question); // add pergunta ao formulario
