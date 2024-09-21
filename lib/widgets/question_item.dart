@@ -4,12 +4,11 @@ import '../models/question.dart';
 import '../providers/form_provider.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-// import 'package:formulario_app/providers/question_provider.dart';
 
 class QuestionItem extends StatelessWidget {
   final Question question;
   final int formIndex;
-  final int questionIndex; // Adicionando o parâmetro `questionIndex`
+  final int questionIndex;
 
   QuestionItem({
     required this.question,
@@ -53,13 +52,20 @@ class QuestionItem extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
+            // Utilizando a função para visualizar a imagem anexada
             Row(
               children: [
                 if (question.imageData != null)
-                  Image.file(
-                    question.imageData! as File,
-                    width: 100,
-                    height: 100,
+                  GestureDetector(
+                    onTap: () {
+                      viewAttachedImage(
+                          context, File(question.imageData! as String));
+                    },
+                    child: Image.file(
+                      File(question.imageData! as String),
+                      width: 100,
+                      height: 100,
+                    ),
                   ),
                 Spacer(),
                 ElevatedButton.icon(
@@ -83,5 +89,31 @@ class QuestionItem extends StatelessWidget {
       final formProvider = Provider.of<FormProvider>(context, listen: false);
       formProvider.addImage(formIndex, questionIndex, File(pickedFile.path));
     }
+  }
+}
+
+// Função reutilizável para visualizar a imagem em tela cheia
+void viewAttachedImage(BuildContext context, File imageFile) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (ctx) => FullScreenImage(imageFile: imageFile),
+    ),
+  );
+}
+
+// Tela de visualização em tela cheia da imagem
+class FullScreenImage extends StatelessWidget {
+  final File imageFile;
+
+  FullScreenImage({required this.imageFile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Image.file(imageFile),
+      ),
+    );
   }
 }
