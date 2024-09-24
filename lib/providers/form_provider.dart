@@ -37,4 +37,6 @@ class FormProvider with ChangeNotifier {
         image as Uint8List?;
     notifyListeners();
   }
+
+  void updateQuestion(int formIndex, int questionIndex, String text) {}
 }
