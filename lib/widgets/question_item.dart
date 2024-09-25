@@ -1,3 +1,4 @@
+//import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/question.dart';
@@ -65,11 +66,14 @@ class QuestionItem extends StatelessWidget {
             SizedBox(height: 10),
             Row(
               children: [
-                if (question.imageData != null)
+                if (question.imageData != null &&
+                    question.imageData!.isNotEmpty)
                   ElevatedButton.icon(
                     icon: Icon(Icons.image),
                     label: Text('Ver Imagem'),
                     onPressed: () {
+                      print(
+                          'Imagem disponível: ${question.imageData}'); // Verificação
                       viewAttachedImage(
                           context, File(question.imageData! as String));
                     },
@@ -88,7 +92,6 @@ class QuestionItem extends StatelessWidget {
     );
   }
 
-  // Função para abrir o diálogo de edição da pergunta
   void _showEditQuestionDialog(
       BuildContext context, FormProvider formProvider) {
     final TextEditingController _controller = TextEditingController();
@@ -121,7 +124,6 @@ class QuestionItem extends StatelessWidget {
             child: Text('Salvar'),
             onPressed: () {
               if (_controller.text.isNotEmpty) {
-                // Atualiza a pergunta no FormProvider
                 formProvider.updateQuestion(
                     formIndex, questionIndex, _controller.text);
                 Navigator.of(ctx).pop();
@@ -138,17 +140,19 @@ class QuestionItem extends StatelessWidget {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
+      print('Imagem selecionada: ${pickedFile.path}'); // Verificação
       final formProvider = Provider.of<FormProvider>(context, listen: false);
       formProvider.addImage(formIndex, questionIndex, File(pickedFile.path));
+    } else {
+      print('Nenhuma imagem foi selecionada'); // Verificação caso falhe
     }
   }
-}
 
-// Função reutilizável para visualizar a imagem em tela cheia
-void viewAttachedImage(BuildContext context, File imageFile) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (ctx) => FullScreenImage(imageFile: imageFile),
-    ),
-  );
+  void viewAttachedImage(BuildContext context, File imageFile) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => FullScreenImage(imageFile: imageFile),
+      ),
+    );
+  }
 }

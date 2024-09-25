@@ -13,7 +13,7 @@ class QuestionProvider with ChangeNotifier {
       _questions.add(
         Question(
           questionText: title,
-          imageData: imageData,
+          imageData: imageData as String,
         ),
       );
       notifyListeners();
@@ -25,7 +25,7 @@ class QuestionProvider with ChangeNotifier {
   // Método para anexar ou atualizar uma imagem para uma pergunta existente.
   void attachImageToQuestion(int questionIndex, Uint8List imageData) {
     if (questionIndex >= 0 && questionIndex < _questions.length) {
-      _questions[questionIndex].imageData = imageData;
+      _questions[questionIndex].imageData = imageData as String?;
       notifyListeners();
     } else {
       // Lida com o caso de índice inválido (opcional)

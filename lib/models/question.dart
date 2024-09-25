@@ -5,7 +5,7 @@ class Question {
   final int? id; // o id será gerado pelo banco de dados
   final String questionText;
   bool? answer; // Resposta de sim ou não, inicializada como null.
-  Uint8List? imageData; // Arquivo de imagem opcional.
+  String? imageData; // Arquivo de imagem opcional.
 
   Question({
     this.id,

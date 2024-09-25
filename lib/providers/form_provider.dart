@@ -32,9 +32,9 @@ class FormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addImage(int formIndex, int questionIndex, File image) {
-    _formularios[formIndex].questions[questionIndex].imageData =
-        image as Uint8List?;
+  void addImage(int formIndex, int questionIndex, File imageFile) {
+    // Acessa a pergunta e adiciona a imagem salvando o caminho correto
+    _formularios[formIndex].questions[questionIndex].imageData = imageFile.path;
     notifyListeners();
   }
 
