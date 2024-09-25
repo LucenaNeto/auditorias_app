@@ -1,9 +1,9 @@
 // import 'dart:io';
-import 'dart:typed_data';
+//import 'dart:typed_data';
 
 class Question {
   final int? id; // o id será gerado pelo banco de dados
-  final String questionText;
+  String questionText;
   bool? answer; // Resposta de sim ou não, inicializada como null.
   String? imageData; // Arquivo de imagem opcional.
 

@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+//import 'dart:typed_data';
 import 'package:formulario_app/models/form.dart';
 import 'package:flutter/material.dart';
 import '../models/question.dart';
@@ -38,5 +38,21 @@ class FormProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateQuestion(int formIndex, int questionIndex, String text) {}
+  void updateQuestion(int formIndex, int questionIndex, String text) {
+    // Verifica se o índice do formulário e da pergunta são válidos
+    if (formIndex >= 0 && formIndex < _formularios.length) {
+      if (questionIndex >= 0 &&
+          questionIndex < _formularios[formIndex].questions.length) {
+        // Atualiza o texto da pergunta
+        _formularios[formIndex].questions[questionIndex].questionText = text;
+
+        // Notifica os ouvintes que houve uma mudança
+        notifyListeners();
+      } else {
+        print("Índice da pergunta inválido.");
+      }
+    } else {
+      print("Índice do formulário inválido.");
+    }
+  }
 }
