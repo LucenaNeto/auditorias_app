@@ -55,4 +55,19 @@ class FormProvider with ChangeNotifier {
       print("Índice do formulário inválido.");
     }
   }
+
+  // função para exluir pergunta do formulario
+  void deleteQuestion(int formIndex, int questionIndex) {
+    if (formIndex >= 0 && formIndex < _formularios.length) {
+      if (questionIndex >= 0 &&
+          questionIndex < _formularios[formIndex].questions.length) {
+        _formularios[formIndex].questions.removeAt(questionIndex);
+        notifyListeners(); // Notifica ouvintes sobre a mudança
+      } else {
+        print('Índice da pergunta inválido');
+      }
+    } else {
+      print('Índice do formulário inválido');
+    }
+  }
 }

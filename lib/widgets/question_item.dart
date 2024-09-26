@@ -1,4 +1,3 @@
-//import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/question.dart';
@@ -21,6 +20,8 @@ class QuestionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formProvider = Provider.of<FormProvider>(context);
+    final question =
+        formProvider.formularios[formIndex].questions[questionIndex];
 
     return Card(
       child: Padding(
@@ -40,6 +41,12 @@ class QuestionItem extends StatelessWidget {
                   onPressed: () =>
                       _showEditQuestionDialog(context, formProvider),
                 ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    _confirmDelete(context, formProvider);
+                  },
+                ), // Botão de exclusão adicionado
               ],
             ),
             Row(
@@ -88,6 +95,33 @@ class QuestionItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Função para confirmar exclusão com diálogo
+  void _confirmDelete(BuildContext context, FormProvider formProvider) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Excluir Pergunta'),
+        content: Text('Tem certeza que deseja excluir esta pergunta?'),
+        actions: [
+          TextButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+          ElevatedButton(
+            child: Text('Excluir'),
+            onPressed: () {
+              formProvider.deleteQuestion(
+                  formIndex, questionIndex); // Exclui a pergunta
+              Navigator.of(ctx).pop(); // Fecha o diálogo
+            },
+          ),
+        ],
       ),
     );
   }
