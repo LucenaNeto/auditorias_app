@@ -30,19 +30,23 @@ class QuestionItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  MainAxisAlignment.start, // para manter alinhado
               children: [
                 Text(
                   question.questionText,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
+                Spacer(), // adiciona um espaço fixo entre o texto e o icone de editar
                 IconButton(
                   icon: Icon(Icons.edit),
+                  iconSize: 30,
                   onPressed: () =>
                       _showEditQuestionDialog(context, formProvider),
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
+                  iconSize: 30,
                   onPressed: () {
                     _confirmDelete(context, formProvider);
                   },
