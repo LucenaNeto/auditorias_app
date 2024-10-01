@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerenciador de Auditorias'),
-        centerTitle: true, // Centraliza o título no AppBar
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 121, 133, 124),
       ),
       body: Padding(
@@ -19,20 +19,12 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Espaço para a logo
             Center(
               child: Container(
                 margin: EdgeInsets.only(bottom: 20.0),
                 child: Image.asset('images/logo.png', height: 200),
               ),
             ),
-            /*Text(
-              '',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-            ),*/
             SizedBox(height: 14),
             Text(
               'Gerencie suas auditorias com facilidade.',
@@ -49,12 +41,16 @@ class HomeScreen extends StatelessWidget {
               ),
               child: Text('Criar Nova Auditoria'),
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context)
+                    .push(
                   MaterialPageRoute(
-                    builder: (ctx) =>
-                        FormListScreen(), // Navega para a tela de listagem de formulários
+                    builder: (ctx) => FormListScreen(),
                   ),
-                );
+                )
+                    .then((_) {
+                  // Recarregar a lista de formulários ao retornar
+                  formProvider.loadFormularios();
+                });
               },
             ),
             SizedBox(height: 24),
@@ -67,37 +63,82 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
-                itemCount: formProvider.formularios.length,
-                itemBuilder: (ctx, i) {
-                  final formulario = formProvider.formularios[i];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    elevation: 5,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(16.0),
-                      title: Text(
-                        formulario.title,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
+              child: FutureBuilder(
+                future: formProvider.loadFormularios(),
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (formProvider.formularios.isEmpty) {
+                    return Center(child: Text('Nenhuma auditoria encontrada.'));
+                  }
+                  return ListView.builder(
+                    itemCount: formProvider.formularios.length,
+                    itemBuilder: (ctx, i) {
+                      final formulario = formProvider.formularios[i];
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        elevation: 5,
+                        child: ListTile(
+                          contentPadding: EdgeInsets.all(16.0),
+                          title: Text(
+                            formulario.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   fontWeight: FontWeight.w600,
                                 ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) =>
-                                FormListScreen(), // Navega para a tela de listagem de formulários
                           ),
-                        );
-                      },
-                    ),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => FormListScreen(),
+                              ),
+                            );
+                          },
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _confirmDelete(
+                                  context, formProvider, formulario.id!);
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmDelete(
+      BuildContext context, FormProvider formProvider, int formularioId) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Excluir Auditoria'),
+        content: Text('Tem certeza que deseja excluir esta auditoria?'),
+        actions: [
+          TextButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+          ElevatedButton(
+            child: Text('Excluir'),
+            onPressed: () {
+              formProvider.deleteFormulario(formularioId);
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
       ),
     );
   }

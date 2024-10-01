@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:formulario_app/models/form.dart';
 import 'package:formulario_app/screens/form_detail_screen.dart';
-//import 'package:formulario_app/models/form.dart';
 
 class FormCard extends StatelessWidget {
   final Formulario formulario;

@@ -24,4 +24,12 @@ class Question {
       'imageData': imageData,
     };
   }
+
+  factory Question.fromMap(Map<String, dynamic> map) {
+    return Question(
+      questionText: map['questionText'],
+      answer: map['answer'] == 1,
+      imageData: map['imageData'],
+    );
+  }
 }

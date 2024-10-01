@@ -3,7 +3,7 @@ import 'dart:typed_data'; // Importa para usar Uint8List
 import '../models/question.dart';
 
 class QuestionProvider with ChangeNotifier {
-  List<Question> _questions = [];
+  final List<Question> _questions = [];
 
   List<Question> get questions => _questions;
 
